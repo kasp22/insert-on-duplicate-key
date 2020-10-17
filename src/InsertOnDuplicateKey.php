@@ -186,7 +186,7 @@ trait InsertOnDuplicateKey
             throw new \InvalidArgumentException('Empty array.');
         }
 
-        return '`' . implode('`,`', array_keys($first)) . '`';
+        return '"' . implode('","', array_keys($first)) . '"';
     }
 
     /**
@@ -202,7 +202,7 @@ trait InsertOnDuplicateKey
 
         foreach ($updatedColumns as $key => $value) {
             if (is_numeric($key)) {
-                $out[] = sprintf('`%s` = VALUES(`%s`)', $value, $value);
+                $out[] = sprintf('"%s" = VALUES("%s")', $value, $value);
             } else {
                 $out[] = sprintf('%s = %s', $key, $value);
             }
@@ -235,7 +235,7 @@ trait InsertOnDuplicateKey
     {
         $first = static::getFirstRow($data);
 
-        $sql  = 'INSERT INTO `' . static::getTablePrefix() . static::getTableName() . '`(' . static::getColumnList($first) . ') VALUES' . PHP_EOL;
+        $sql  = 'INSERT INTO "' . static::getTablePrefix() . static::getTableName() . '"(' . static::getColumnList($first) . ') VALUES' . PHP_EOL;
         $sql .=  static::buildQuestionMarks($data) . PHP_EOL;
         $sql .= 'ON DUPLICATE KEY UPDATE ';
 
@@ -259,7 +259,7 @@ trait InsertOnDuplicateKey
     {
         $first = static::getFirstRow($data);
 
-        $sql  = 'INSERT IGNORE INTO `' . static::getTablePrefix() . static::getTableName() . '`(' . static::getColumnList($first) . ') VALUES' . PHP_EOL;
+        $sql  = 'INSERT IGNORE INTO "' . static::getTablePrefix() . static::getTableName() . '"(' . static::getColumnList($first) . ') VALUES' . PHP_EOL;
         $sql .=  static::buildQuestionMarks($data);
 
         return $sql;
@@ -276,7 +276,7 @@ trait InsertOnDuplicateKey
     {
         $first = static::getFirstRow($data);
 
-        $sql  = 'REPLACE INTO `' . static::getTablePrefix() . static::getTableName() . '`(' . static::getColumnList($first) . ') VALUES' . PHP_EOL;
+        $sql  = 'REPLACE INTO "' . static::getTablePrefix() . static::getTableName() . '"(' . static::getColumnList($first) . ') VALUES' . PHP_EOL;
         $sql .=  static::buildQuestionMarks($data);
 
         return $sql;
